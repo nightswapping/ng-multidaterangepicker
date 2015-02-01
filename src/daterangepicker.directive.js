@@ -205,6 +205,11 @@ angular.module('daterangepicker.directives', ['lodash'])
         return is_disabled || (minDate && date < minDate) || belowMaxDate ||
           (scope.monthOnly && dateFilter(date, 'M') !== currentMonth.toString());
       }
+
+      // Resets the activeRange field when the directive is destroyed
+      scope.$on('$destroy', function() {
+        activeRange.reset()
+      })
     }
   };
 });
