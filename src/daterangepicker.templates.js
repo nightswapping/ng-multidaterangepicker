@@ -1,4 +1,4 @@
-angular.module('example.calendar', ['daterangepicker'])
+angular.module('daterangepicker.templates', [])
   .run(function($templateCache) {
     $templateCache.put('calendar/daterange_picker.html',
       '<div class="daterangepicker">' +
@@ -44,11 +44,4 @@ angular.module('example.calendar', ['daterangepicker'])
         '</div>' +
       '</div>'
     )
-  })
-  .controller('calendarCtrl', function($scope) {
-    $scope.dateRanges = []
-    $scope.newDateRange = function(range) {
-      console.log(range);
-    }
-    $scope.test = 'test'
   })
