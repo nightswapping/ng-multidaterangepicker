@@ -1,70 +1,8 @@
 if (typeof module !== "undefined" && typeof exports !== "undefined" && module.exports === exports){
-  module.exports = 'clustered.map';
+  module.exports = 'daterangepicker';
 }
 
 (function (window, angular, undefined) {
-angular.module('daterangepicker.constants', [])
-  .constant("calendarData", {
-    days: [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-      "Sunday"
-    ],
-    daysShort: [
-      "Sun",
-      "Mon",
-      "Tue",
-      "Wed",
-      "Thu",
-      "Fri",
-      "Sat",
-      "Sun"
-    ],
-    daysMin: [
-      "Su",
-      "Mo",
-      "Tu",
-      "We",
-      "Th",
-      "Fr",
-      "Sa",
-      "Su"
-    ],
-    months: [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December"
-    ],
-    monthsShort: [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec"
-    ],
-    today: "Today"
-  })
 angular.module('daterangepicker.directives', ['lodash'])
 
 .factory('activeRange', function (_) {
@@ -272,6 +210,11 @@ angular.module('daterangepicker.directives', ['lodash'])
         return is_disabled || (minDate && date < minDate) || belowMaxDate ||
           (scope.monthOnly && dateFilter(date, 'M') !== currentMonth.toString());
       }
+
+      // Resets the activeRange field when the directive is destroyed
+      scope.$on('$destroy', function() {
+        activeRange.reset()
+      })
     }
   };
 });
@@ -419,8 +362,145 @@ angular.module('daterangepicker.factories', [])
   };
 });
 angular.module('daterangepicker', [
-  'daterangepicker.constants',
+  'daterangepicker.templates',
+  'daterangepicker.providers',
   'daterangepicker.factories',
   'daterangepicker.directives',
 ]);
+angular.module('daterangepicker.providers', [])
+  .provider('calendarData', function() {
+    var data = {
+      days: [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+      ],
+      daysShort: [
+        "Sun",
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri",
+        "Sat",
+        "Sun"
+      ],
+      daysMin: [
+        "Su",
+        "Mo",
+        "Tu",
+        "We",
+        "Th",
+        "Fr",
+        "Sa",
+        "Su"
+      ],
+      months: [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+      ],
+      monthsShort: [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec"
+      ],
+      today: "Today"
+    }
+
+    return {
+      setDays : function(days) {
+        data.days = days;
+      },
+      setDaysShort : function(daysShort) {
+        data.daysShort = daysShort;
+      },
+      setDaysMin : function(daysMin) {
+        data.daysMin = daysMin;
+      },
+      setMonths : function(months) {
+        data.months = months;
+      },
+      setMonthsShort : function(monthsShort) {
+        data.monthsShort = monthsShort;
+      },
+      $get : function() {
+        if (!data) {
+          throw new Error('You must set dates headers');
+        }
+
+        return data
+      }
+    }
+  })
+angular.module('daterangepicker.templates', [])
+  .run(function($templateCache) {
+    $templateCache.put('calendar/daterange_picker.html',
+      '<div class="daterangepicker">' +
+        '<div class="daterangepicker-header">' +
+          '<div class="daterangepicker-controls">' +
+            '<div class="daterangepicker-month">' +
+              '<a href="" ng-click="changeMonth(-1)" ng-show="allowPrevMonth" translate="translate"' +
+                 'lass="daterangepicker-prevmonth">' +
+                '<i class="icon-chevron-left"></i>' +
+              '</a>' +
+              '<span>{{getI18nMonth(currentDate)}}</span>' +
+              '<a href="" ng-click="changeMonth(1)" ng-show="allowNextMonth" translate="translate"' +
+                 'lass="daterangepicker-nextmonth">' +
+                '<i class="icon-chevron-right"></i>' +
+              '</a>' +
+            '</div>' +
+            '<div class="daterangepicker-year">' +
+              '<a href="" ng-click="changeMonth(-12)" ng-show="allowPrevMonth"' +
+                 'lass="daterangepicker-prevmonth">' +
+                '<i class="icon-chevron-left"></i>' +
+              '</a>' +
+              '<span>{{currentDate | date:"yyyy"}}</span>' +
+              '<a href="" ng-click="changeMonth(12)" ng-show="allowNextMonth" class="daterangepicker-nextyear">' +
+                '<i class="icon-chevron-right"></i>' +
+              '</a>' +
+            '</div>' +
+'' +
+          '</div>' +
+        '</div>' +
+        '<div class="daterangepicker-body">' +
+          '<div class="daterangepicker-main">' +
+            '<ul class="daterangepicker-cell">' +
+              '<li ng-repeat="dayName in dayNames" class="daterangepicker-head">{{dayName}}</li>' +
+            '</ul>' +
+            '<ul class="daterangepicker-cell">' +
+              '<li ng-class="getClass(date)" ng-repeat="date in dates" ng-click="setDate(date)"' +
+                  'g-mouseenter="mouseEnter(date)" ng-mouseleave="mouseLeave(date)"' +
+                  'tartToday="true">' +
+                '{{date | date:"d"}}' +
+              '</li>' +
+            '</ul>' +
+          '</div>' +
+        '</div>' +
+      '</div>'
+    )
+  })
 })(window, window.angular);
