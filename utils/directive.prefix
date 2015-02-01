@@ -1,5 +1,5 @@
 if (typeof module !== "undefined" && typeof exports !== "undefined" && module.exports === exports){
-  module.exports = 'clustered.map';
+  module.exports = 'daterangepicker';
 }
 
 (function (window, angular, undefined) {
