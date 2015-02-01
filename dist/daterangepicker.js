@@ -3,6 +3,14 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
 }
 
 (function (window, angular, undefined) {
+angular.module('lodash', [])
+  .factory('_', function ($window) {
+    if ($window._ === undefined) {
+      throw new Error('lodash is not bound to window');
+    }
+    return $window._;
+  })
+
 angular.module('daterangepicker.directives', ['lodash'])
 
 .factory('activeRange', function (_) {

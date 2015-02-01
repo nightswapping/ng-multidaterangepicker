@@ -9,7 +9,7 @@
   "scripts": {
     "minify": "uglifyjs --lint false -mc -o dist/daterangepicker.min.js dist/daterangepicker.js",
     "cat:npm-internals": "cat utils/directive.prefix dist/_daterangepicker.js utils/directive.suffix > dist/daterangepicker.js",
-    "cat:ng-internals": "cat src/*.js > dist/_daterangepicker.js",
+    "cat:ng-internals": "cat utils/lodash.factory.js src/*.js > dist/_daterangepicker.js",
     "clean": "rm dist/_daterangepicker.js",
     "cat": "npm run cat:ng-internals && npm run cat:npm-internals && npm run clean",
     "build": "npm run cat && npm run minify",
