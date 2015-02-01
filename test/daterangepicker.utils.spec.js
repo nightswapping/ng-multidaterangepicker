@@ -32,7 +32,6 @@ describe('daterangepickerUtils', function () {
     });
   });
 
-
   describe('areDatesEqual', function() {
     it('checks the dates are equal', function() {
       expect(utils.areDatesEqual(new Date('2014-12-01'), '2014-12-01')).to.equal(true);
@@ -142,7 +141,7 @@ describe('daterangepickerUtils', function () {
     it('returns a range if the date is contained in it', function() {
       var dateRanges = [{ start_date: '2015-01-01', end_date: '2015-01-31' }];
 
-      expect(utils.findRangesForDate(dateRanges, new Date())).to.deep.equal(dateRanges);
+      expect(utils.findRangesForDate(dateRanges, new Date('2015-01-10'))).to.deep.equal(dateRanges);
     });
   });
 
@@ -164,7 +163,7 @@ describe('daterangepickerUtils', function () {
       var dateRanges = [{ start_date: '2015-01-01', end_date: '2015-01-31' }];
       var anotherDateRanges = [{ start_date: '2015-01-11', end_date: '2015-02-31' }];
 
-      expect(utils.findRangesForDate(dateRanges, new Date())).to.deep.equal(dateRanges);
+      expect(utils.findRangesForDate(dateRanges, new Date('2015-01-18'))).to.deep.equal(dateRanges);
     });
   });
 });

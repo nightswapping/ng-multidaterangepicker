@@ -6,8 +6,10 @@ describe('daterangepicker', function () {
       $compile,
       utils = null,
       doc = null,
+      activeRange = null,
+      spy = 0,
       html = '<div daterangepicker date-ranges="dateRanges" default-date="defaultDate" min-date="minDate"' +
-             'max-date="maxDate" week-starts-on="weekStartsOn" on-date-click="onNewRange"' +
+             'max-date="maxDate" week-starts-on="weekStartsOn" on-date-click="onDateClick"' +
              'start-today="false" no-extra-rows template="template/calendar.tpl.html"></div>';
 
   beforeEach(module("daterangepicker"));
@@ -60,12 +62,13 @@ describe('daterangepicker', function () {
   }));
 
   beforeEach(function() {
-    inject(function($document, $rootScope, _$compile_, _daterangepickerUtils_){
-      $scope   = $rootScope.$new();
-      $compile = _$compile_;
-      utils    = _daterangepickerUtils_;
+    inject(function($document, $rootScope, _$compile_, _daterangepickerUtils_, _activeRange_){
+      $scope      = $rootScope.$new();
+      $compile    = _$compile_;
+      utils       = _daterangepickerUtils_;
+      activeRange = _activeRange_;
       angular.element($document[0].querySelectorAll('body')).append(html);
-      doc      = $document[0];
+      doc         = $document[0];
     });
   });
 
@@ -82,8 +85,9 @@ describe('daterangepicker', function () {
       //$scope.maxDate = '2014-06-01';
       $scope.defaultDate = '2014-05-19';
       $scope.date = [ { start: '2014-05-17', class: 'available' } ];
-      //$scope.onNewRange = function() {
-        //return [ { start: '2014-05-17', class: 'available' } ]; }
+      $scope.onDateClick = function() {
+        spy++
+        return [ { start: '2014-05-17', class: 'available' } ]; }
       compile();
     });
 
@@ -102,7 +106,6 @@ describe('daterangepicker', function () {
     })
 
     describe('Class addition', function() {
-
       beforeEach(function() {
         $scope.dateRanges = [{ start_date: '2014-05-30', end_date: '2014-05-31', css_classes: 'foobar'}];
         compile();
@@ -115,6 +118,95 @@ describe('daterangepicker', function () {
       it("adds the 'foobar' class 2014-05-17", function() {
         expect($('li.foobar').first().text()).to.equal('30')
       });
+    });
+
+    describe('calls onDateClick on clicks', function() {
+      beforeEach(function() {
+        spy = 0;
+        compile();
+      })
+
+      it("should call onDateClick when an enabled date is clicked", function() {
+        browserTrigger($('li.daterangepicker-enabled').first(), 'click');
+        expect(spy).to.equal(1)
+      });
+
+      it("should call onDateClick at every click", function() {
+        browserTrigger($('li.daterangepicker-enabled').first(), 'click');
+        browserTrigger($('li.daterangepicker-enabled').first(), 'click');
+        browserTrigger($('li.daterangepicker-enabled').first(), 'click');
+        browserTrigger($('li.daterangepicker-enabled').first(), 'click');
+        browserTrigger($('li.daterangepicker-enabled').first(), 'click');
+        expect(spy).to.equal(5)
+      });
+
+      it("shouldn't call onDateClick when a disabled date is clicked", function() {
+        browserTrigger($('li.daterangepicker-disabled').first(), 'click');
+        expect(spy).to.equal(0)
+      });
+    });
+
+    describe('onDateClick', function() {
+      var firstDate,
+        secondDate;
+      beforeEach(function() {
+        spy = 0;
+        $scope.onDateClick = function(activeRange) {
+          spy++
+          $scope.dateRanges.push({ start_date: '2014-05-30', end_date: '2014-05-31'})
+          firstDate = activeRange.first_date
+
+          // sets isPendingClick to true on first click
+          if (spy === 1) {
+            activeRange.isPendingClick = true
+          } else {
+            activeRange.isPendingClick = false
+          }
+
+          secondDate = activeRange.second_date
+
+        }
+        compile();
+      })
+
+      it("updates the dateRanges on click", function() {
+        browserTrigger($('li.daterangepicker-enabled').first(), 'click');
+        expect(spy).to.equal(1)
+        expect($scope.dateRanges.length).to.equal(1)
+      });
+
+      it("sets the clicked date as active", function() {
+        var expectedDate = new Date('Sat May 17 2014 03:00:00 GMT+0200 (CEST)')
+        browserTrigger($('li.daterangepicker-enabled').first(), 'click');
+        expect(spy).to.equal(1)
+        expect(firstDate.getDay()).to.equal(expectedDate.getDay())
+        expect(firstDate.getMonth()).to.equal(expectedDate.getMonth())
+        expect(firstDate.getYear()).to.equal(expectedDate.getYear())
+      });
+
+      it("return a second date if isPendingClick is set to true", function() {
+        var expectedDate = new Date('Sat May 18 2014 03:00:00 GMT+0200 (CEST)')
+        browserTrigger($('li.daterangepicker-enabled').first(), 'click');
+        browserTrigger($('li.daterangepicker-enabled:contains(18)'), 'click');
+        expect(spy).to.equal(2)
+        expect(secondDate.getDay()).to.equal(expectedDate.getDay())
+        expect(secondDate.getMonth()).to.equal(expectedDate.getMonth())
+        expect(secondDate.getYear()).to.equal(expectedDate.getYear())
+      });
+    });
+
+    describe('$destroy', function() {
+      beforeEach(function() {
+        spy = 0;
+        activeRange.first_date = new Date()
+        compile();
+      })
+
+      it('resets the activeRange when the directive is destroyed', function() {
+        expect(activeRange.first_date).not.to.equal(null)
+        $scope.$destroy();
+        expect(activeRange.first_date).to.equal(null)
+      })
     });
   });
 });
