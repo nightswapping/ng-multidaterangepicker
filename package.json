@@ -13,7 +13,9 @@
     "clean": "rm dist/_daterangepicker.js",
     "cat": "npm run cat:ng-internals && npm run cat:npm-internals && npm run clean",
     "build": "npm run cat && npm run minify",
-    "watch:js": "",
+    "watch:js": "watch 'npm run cat' ./src",
+    "watch:ex": "watch 'npm run cat' ./examples",
+    "watch": "npm run watch:js && npm run watch:ex",
     "test": "npm run cat && ./node_modules/karma/bin/karma start --single-run --no-auto-watch"
   },
   "author": "= <=>",
@@ -26,8 +28,8 @@
     "karma-phantomjs-launcher": "^0.1.4",
     "jquery": "^2.1.3",
     "lodash": "^3.0.0",
-    "uglify-js": "^2.4.16"
+    "uglify-js": "^2.4.16",
+    "watch": "^0.13.0"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }
