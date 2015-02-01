@@ -1,5 +1,6 @@
 angular.module('daterangepicker', [
-  'daterangepicker.constants',
+  'daterangepicker.templates',
+  'daterangepicker.providers',
   'daterangepicker.factories',
   'daterangepicker.directives',
 ]);
