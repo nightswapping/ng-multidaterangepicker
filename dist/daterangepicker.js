@@ -82,7 +82,9 @@ angular.module('daterangepicker.directives', ['lodash'])
           maxDate       = scope.maxDate,
           weekStartsOn  = scope.weekStartsOn || 0,
           noExtraRows   = attrs.hasOwnProperty('noExtraRows'),
-          currentMonth;
+          currentMonth,
+          minFirstDay,
+          maxFirstDay;
 
       if (!!scope.startToday && scope.startToday !== 'false') {
         minDate = new Date();
@@ -94,6 +96,11 @@ angular.module('daterangepicker.directives', ['lodash'])
         }
         // We want to compare dates, not date times
         minDate.setHours(0,0,0,0);
+
+        // First day of the month in which the minDate is
+        minFirstDay = new Date(minDate.getFullYear(), minDate.getMonth(), 1);
+        // We want to compare dates, not date times
+        minFirstDay.setHours(0,0,0,0);
       }
 
       if (!!maxDate) {
@@ -102,6 +109,11 @@ angular.module('daterangepicker.directives', ['lodash'])
         }
         // We want to compare dates, not date times
         maxDate.setHours(0,0,0,0);
+
+        // First day of the month in which the maxDate is
+        maxFirstDay = new Date(maxDate.getFullYear(), maxDate.getMonth(), 1);
+        // We want to compare dates, not date times
+        maxFirstDay.setHours(0,0,0,0);
       }
 
       if (!angular.isNumber(weekStartsOn) || weekStartsOn < 0 || weekStartsOn > 6) {
@@ -143,6 +155,15 @@ angular.module('daterangepicker.directives', ['lodash'])
 
         scope.allowPrevMonth = !minDate || initialDate > minDate;
         scope.allowNextMonth = !maxDate || nextMonthInitialDate <= maxDate;
+
+        var prevYearInitialDate = new Date(initialDate);
+        prevYearInitialDate.setYear(initialDate.getFullYear() - 1);
+
+        var nextYearInitialDate = new Date(initialDate);
+        nextYearInitialDate.setYear(initialDate.getFullYear() + 1);
+
+        scope.allowPrevYear = !minDate || prevYearInitialDate >= minFirstDay;
+        scope.allowNextYear = !maxDate || nextYearInitialDate <= maxFirstDay;
       };
 
       scope.render(currentDate);

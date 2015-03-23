@@ -1,4 +1,5 @@
 angular.module('example.calendar', ['daterangepicker'])
+
   .controller('calendarCtrl', function($scope) {
     $scope.dateRanges = []
     $scope.newDateRange = function(range) {
