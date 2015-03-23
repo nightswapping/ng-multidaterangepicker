@@ -88,12 +88,20 @@ angular.module('daterangepicker.directives', ['lodash'])
         minDate = new Date();
       }
 
-      if (minDate && !_.isDate(minDate)) {
-        minDate = daterangepickerUtils.stringToDate(minDate);
+      if (!!minDate) {
+        if (!_.isDate(minDate)) {
+          minDate = daterangepickerUtils.stringToDate(minDate);
+        }
+        // We want to compare dates, not date times
+        minDate.setHours(0,0,0,0);
       }
 
-      if (maxDate && !_.isDate(maxDate)) {
-        maxDate = daterangepickerUtils.stringToDate(maxDate);
+      if (!!maxDate) {
+        if (!_.isDate(maxDate)) {
+          maxDate = daterangepickerUtils.stringToDate(maxDate);
+        }
+        // We want to compare dates, not date times
+        maxDate.setHours(0,0,0,0);
       }
 
       if (!angular.isNumber(weekStartsOn) || weekStartsOn < 0 || weekStartsOn > 6) {
@@ -112,12 +120,17 @@ angular.module('daterangepicker.directives', ['lodash'])
         currentDate = new Date();
       }
 
+      // We want to compare dates, not date times
+      currentDate.setHours(0,0,0,0);
+
       scope.dayNames    = daterangepickerUtils.buildDayNames(weekStartsOn);
       scope.currentDate = currentDate;
       scope.monthOnly = scope.monthOnly || false;
 
       scope.render = function (initialDate) {
-        initialDate = new Date(initialDate.getFullYear(), initialDate.getMonth(), 1, 3);
+        initialDate = new Date(initialDate.getFullYear(), initialDate.getMonth(), 1);
+        initialDate.setHours(0,0,0,0);
+
         currentMonth = currentDate.getMonth() + 1;
 
         scope.dates = daterangepickerUtils.buildDates(
@@ -246,13 +259,21 @@ angular.module('daterangepicker.factories', [])
         end_date = new Date(end_date);
       }
 
+      // We want to compare dates not date times
+      start_date.setHours(0,0,0,0);
+      end_date.setHours(0,0,0,0);
+
       dateRanges = dateRanges || [];
-      var overlappingRanges = [];
+      var overlappingRanges = [],
+          dr_start, dr_end;
       for (var l = 0; l < dateRanges.length; l++) {
-        if ((start_date <= this.stringToDate(dateRanges[l].end_date) &&
-            end_date >= this.stringToDate(dateRanges[l].start_date)) ||
-            (end_date >= this.stringToDate(dateRanges[l].start_date) &&
-            start_date <= this.stringToDate(dateRanges[l].end_date))) {
+        dr_start = this.stringToDate(dateRanges[l].start_date);
+        dr_start.setHours(0,0,0,0);
+
+        dr_end = this.stringToDate(dateRanges[l].end_date)
+        dr_end.setHours(0,0,0,0);
+
+        if (start_date <= dr_end && end_date >= dr_start) {
           overlappingRanges.push(dateRanges[l]);
         }
       }
@@ -264,11 +285,20 @@ angular.module('daterangepicker.factories', [])
      * include a given date.
      **/
     findRangesForDate: function (dateRanges, date) {
+      // We want to compare dates not date times
+      date.setHours(0,0,0,0);
+
       dateRanges = dateRanges || [];
       var overlappingRanges = [];
+      var dr_start, dr_end;
       for (var l = 0; l < dateRanges.length; l++) {
-        if (date >= this.stringToDate(dateRanges[l].start_date) &&
-            date <= this.stringToDate(dateRanges[l].end_date)) {
+        dr_start = this.stringToDate(dateRanges[l].start_date);
+        dr_start.setHours(0,0,0,0);
+
+        dr_end = this.stringToDate(dateRanges[l].end_date)
+        dr_end.setHours(0,0,0,0);
+
+        if (date >= dr_start && date <= dr_end) {
           overlappingRanges.push(dateRanges[l]);
         }
       }

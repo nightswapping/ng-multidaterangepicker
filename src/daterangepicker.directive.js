@@ -75,12 +75,20 @@ angular.module('daterangepicker.directives', ['lodash'])
         minDate = new Date();
       }
 
-      if (minDate && !_.isDate(minDate)) {
-        minDate = daterangepickerUtils.stringToDate(minDate);
+      if (!!minDate) {
+        if (!_.isDate(minDate)) {
+          minDate = daterangepickerUtils.stringToDate(minDate);
+        }
+        // We want to compare dates, not date times
+        minDate.setHours(0,0,0,0);
       }
 
-      if (maxDate && !_.isDate(maxDate)) {
-        maxDate = daterangepickerUtils.stringToDate(maxDate);
+      if (!!maxDate) {
+        if (!_.isDate(maxDate)) {
+          maxDate = daterangepickerUtils.stringToDate(maxDate);
+        }
+        // We want to compare dates, not date times
+        maxDate.setHours(0,0,0,0);
       }
 
       if (!angular.isNumber(weekStartsOn) || weekStartsOn < 0 || weekStartsOn > 6) {
@@ -99,13 +107,16 @@ angular.module('daterangepicker.directives', ['lodash'])
         currentDate = new Date();
       }
 
+      // We want to compare dates, not date times
+      currentDate.setHours(0,0,0,0);
+
       scope.dayNames    = daterangepickerUtils.buildDayNames(weekStartsOn);
       scope.currentDate = currentDate;
       scope.monthOnly = scope.monthOnly || false;
 
       scope.render = function (initialDate) {
-        initialDate = new Date(initialDate.getFullYear(), initialDate.getMonth(), 1, 3);
-        currentMonth = currentDate.getMonth() + 1;
+        initialDate = new Date(initialDate.getFullYear(), initialDate.getMonth(), 1);
+        initialDate.setHours(0,0,0,0);
 
         scope.dates = daterangepickerUtils.buildDates(
           initialDate,
@@ -113,7 +124,7 @@ angular.module('daterangepicker.directives', ['lodash'])
         );
 
         var nextMonthInitialDate = new Date(initialDate);
-        nextMonthInitialDate.setMonth(currentMonth);
+        nextMonthInitialDate.setMonth(initialDate.getMonth() + 1);
 
         scope.allowPrevMonth = !minDate || initialDate > minDate;
         scope.allowNextMonth = !maxDate || nextMonthInitialDate <= maxDate;

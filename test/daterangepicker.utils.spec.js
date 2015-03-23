@@ -135,13 +135,16 @@ describe('daterangepickerUtils', function () {
     it('returns doesnt return the range if the date isnt contained in it', function() {
       var dateRanges = [{ start_date: '2015-01-01', end_date: '2015-01-31' }];
 
-      expect(utils.findRangesForDate(dateRanges, new Date('2014-01-01')).length).to.equal(0);
+      expect(utils.findRangesForDate(dateRanges, new Date('2014-12-31')).length).to.equal(0);
+      expect(utils.findRangesForDate(dateRanges, new Date('2015-02-01')).length).to.equal(0);
     });
 
     it('returns a range if the date is contained in it', function() {
       var dateRanges = [{ start_date: '2015-01-01', end_date: '2015-01-31' }];
 
-      expect(utils.findRangesForDate(dateRanges, new Date('2015-01-10'))).to.deep.equal(dateRanges);
+      expect(utils.findRangesForDate(dateRanges, new Date('2015-01-15'))).to.deep.equal(dateRanges);
+      expect(utils.findRangesForDate(dateRanges, new Date('2015-01-31'))).to.deep.equal(dateRanges);
+      expect(utils.findRangesForDate(dateRanges, new Date('2015-01-01'))).to.deep.equal(dateRanges);
     });
   });
 
@@ -149,21 +152,34 @@ describe('daterangepickerUtils', function () {
     it('returns an empty range for dateRanges=[]', function() {
       var dateRanges = [];
 
-      expect(utils.findRangesForDate(dateRanges, []).length).to.equal(0);
+      expect(utils.findRangesForRange(dateRanges, []).length).to.equal(0);
     });
 
     it('returns doesnt return the range if the date isnt contained in it', function() {
       var dateRanges = [{ start_date: '2015-01-01', end_date: '2015-01-31' }];
-      var anotherDateRanges = [{ start_date: '2016-01-01', end_date: '2016-01-31' }];
 
-      expect(utils.findRangesForDate(dateRanges, anotherDateRanges).length).to.equal(0);
+      expect(utils.findRangesForRange(dateRanges, [{ start_date: '2014-12-29', end_date: '2014-12-31' }]).length).to.equal(0);
+      expect(utils.findRangesForRange(dateRanges, [{ start_date: '2015-02-01', end_date: '2015-02-02' }]).length).to.equal(0);
     });
 
     it('returns a range if the date is contained in it', function() {
       var dateRanges = [{ start_date: '2015-01-01', end_date: '2015-01-31' }];
-      var anotherDateRanges = [{ start_date: '2015-01-11', end_date: '2015-02-31' }];
 
-      expect(utils.findRangesForDate(dateRanges, new Date('2015-01-18'))).to.deep.equal(dateRanges);
+      expect(utils.findRangesForRange(dateRanges, '2014-12-15', '2015-01-01')).to.deep.equal(dateRanges);
+      expect(utils.findRangesForRange(dateRanges, '2014-12-15', '2015-01-15')).to.deep.equal(dateRanges);
+      expect(utils.findRangesForRange(dateRanges, '2014-12-15', '2015-01-31')).to.deep.equal(dateRanges);
+      expect(utils.findRangesForRange(dateRanges, '2014-12-15', '2015-02-15')).to.deep.equal(dateRanges);
+
+      expect(utils.findRangesForRange(dateRanges, '2015-01-01', '2015-01-15')).to.deep.equal(dateRanges);
+      expect(utils.findRangesForRange(dateRanges, '2015-01-01', '2015-01-31')).to.deep.equal(dateRanges);
+      expect(utils.findRangesForRange(dateRanges, '2014-12-15', '2015-02-15')).to.deep.equal(dateRanges);
+
+      expect(utils.findRangesForRange(dateRanges, '2015-01-15', '2015-01-31')).to.deep.equal(dateRanges);
+      expect(utils.findRangesForRange(dateRanges, '2014-01-15', '2015-02-15')).to.deep.equal(dateRanges);
+
+      expect(utils.findRangesForRange(dateRanges, '2014-01-31', '2015-02-15')).to.deep.equal(dateRanges);
+
     });
+
   });
 });
