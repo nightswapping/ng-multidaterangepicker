@@ -527,22 +527,22 @@ angular.module('daterangepicker.templates', [])
           '<div class="daterangepicker-controls">' +
             '<div class="daterangepicker-month">' +
               '<a href="" ng-click="changeMonth(-1)" ng-show="allowPrevMonth" translate="translate"' +
-                 'lass="daterangepicker-prevmonth">' +
+                 ' class="daterangepicker-prevmonth">' +
                 '<i class="icon-chevron-left"></i>' +
               '</a>' +
               '<span>{{getI18nMonth(currentDate)}}</span>' +
               '<a href="" ng-click="changeMonth(1)" ng-show="allowNextMonth" translate="translate"' +
-                 'lass="daterangepicker-nextmonth">' +
+                 ' class="daterangepicker-nextmonth">' +
                 '<i class="icon-chevron-right"></i>' +
               '</a>' +
             '</div>' +
             '<div class="daterangepicker-year">' +
-              '<a href="" ng-click="changeMonth(-12)" ng-show="allowPrevMonth"' +
-                 'lass="daterangepicker-prevmonth">' +
+              '<a href="" ng-click="changeMonth(-12)" ng-show="allowPrevYear"' +
+                ' class="daterangepicker-prevyear">' +
                 '<i class="icon-chevron-left"></i>' +
               '</a>' +
               '<span>{{currentDate | date:"yyyy"}}</span>' +
-              '<a href="" ng-click="changeMonth(12)" ng-show="allowNextMonth" class="daterangepicker-nextyear">' +
+              '<a href="" ng-click="changeMonth(12)" ng-show="allowNextYear" class="daterangepicker-nextyear">' +
                 '<i class="icon-chevron-right"></i>' +
               '</a>' +
             '</div>' +

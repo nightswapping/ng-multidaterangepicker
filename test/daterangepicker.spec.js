@@ -21,26 +21,27 @@ describe('daterangepicker', function () {
           '<div class="daterangepicker-controls">' +
             '<div class="daterangepicker-month">' +
               '<a href="" ng-click="changeMonth(-1)" ng-show="allowPrevMonth" translate="translate"' +
-                 'class="daterangepicker-prevmonth">' +
+                 ' class="daterangepicker-prevmonth">' +
                 '<i class="icon-chevron-left"></i>' +
               '</a>' +
               '<span>{{getI18nMonth(currentDate)}}</span>' +
               '<a href="" ng-click="changeMonth(1)" ng-show="allowNextMonth" translate="translate"' +
-                 'lass="daterangepicker-nextmonth">' +
+                 ' class="daterangepicker-nextmonth">' +
                 '<i class="icon-chevron-right"></i>' +
               '</a>' +
             '</div>' +
             '<div class="daterangepicker-year">' +
-              '<a href="" ng-click="changeMonth(-12)" ng-show="allowPrevMonth"' +
-                 'lass="daterangepicker-prevmonth">' +
+              '<a href="" ng-click="changeMonth(-12)" ng-show="allowPrevYear"' +
+                 ' class="daterangepicker-prevyear">' +
                 '<i class="icon-chevron-left"></i>' +
               '</a>' +
               '<span>{{currentDate | date:"yyyy"}}</span>' +
-              '<a href="" ng-click="changeMonth(12)" ng-show="allowNextMonth" class="daterangepicker-nextyear">' +
+              '<a href="" ng-click="changeMonth(12)" ng-show="allowNextYear"' +
+                ' class="daterangepicker-nextyear">' +
                 '<i class="icon-chevron-right"></i>' +
               '</a>' +
             '</div>' +
-      '' +
+            '' +
           '</div>' +
         '</div>' +
         '<div class="daterangepicker-body">' +
@@ -82,7 +83,7 @@ describe('daterangepicker', function () {
 
     beforeEach(function() {
       $scope.minDate = '2014-05-17';
-      //$scope.maxDate = '2014-06-01';
+      $scope.maxDate = '2015-05-17';
       $scope.defaultDate = '2014-05-19';
       $scope.date = [ { start: '2014-05-17', class: 'available' } ];
       $scope.onDateClick = function() {
@@ -103,6 +104,54 @@ describe('daterangepicker', function () {
         compile()
         expect($('li.daterangepicker-disabled:contains(31)').length).to.equal(2);
       });
+
+      it("disables previous month/year, allows next month/year links", function() {
+        expect($('.daterangepicker-prevmonth').hasClass('ng-hide')).to.equal(true);
+        expect($('.daterangepicker-nextmonth').hasClass('ng-hide')).to.equal(false);
+        expect($('.daterangepicker-prevyear').hasClass('ng-hide')).to.equal(true);
+        expect($('.daterangepicker-nextyear').hasClass('ng-hide')).to.equal(false);
+      });
+
+      it("disables previous/next month/year links", function() {
+        $scope.minDate = '2014-05-01';
+        $scope.maxDate = '2014-05-30';
+        compile();
+        expect($('.daterangepicker-prevmonth').hasClass('ng-hide')).to.equal(true);
+        expect($('.daterangepicker-nextmonth').hasClass('ng-hide')).to.equal(true);
+        expect($('.daterangepicker-prevyear').hasClass('ng-hide')).to.equal(true);
+        expect($('.daterangepicker-nextyear').hasClass('ng-hide')).to.equal(true);
+      });
+
+      it("allows previous/next month, disables previous/next year links lowest point", function() {
+        $scope.minDate = '2014-04-30';
+        $scope.maxDate = '2014-06-01';
+        compile();
+        expect($('.daterangepicker-prevmonth').hasClass('ng-hide')).to.equal(false);
+        expect($('.daterangepicker-nextmonth').hasClass('ng-hide')).to.equal(false);
+        expect($('.daterangepicker-prevyear').hasClass('ng-hide')).to.equal(true);
+        expect($('.daterangepicker-nextyear').hasClass('ng-hide')).to.equal(true);
+      });
+
+      it("allows previous/next month, disables previous/next year links highest point", function() {
+        $scope.minDate = '2013-06-01';
+        $scope.maxDate = '2015-04-30';
+        compile();
+        expect($('.daterangepicker-prevmonth').hasClass('ng-hide')).to.equal(false);
+        expect($('.daterangepicker-nextmonth').hasClass('ng-hide')).to.equal(false);
+        expect($('.daterangepicker-prevyear').hasClass('ng-hide')).to.equal(true);
+        expect($('.daterangepicker-nextyear').hasClass('ng-hide')).to.equal(true);
+      });
+
+      it("allows previous/next month and previous/next year links", function() {
+        $scope.minDate = '2013-05-31';
+        $scope.maxDate = '2015-05-01';
+        compile();
+        expect($('.daterangepicker-prevmonth').hasClass('ng-hide')).to.equal(false);
+        expect($('.daterangepicker-nextmonth').hasClass('ng-hide')).to.equal(false);
+        expect($('.daterangepicker-prevyear').hasClass('ng-hide')).to.equal(false);
+        expect($('.daterangepicker-nextyear').hasClass('ng-hide')).to.equal(false);
+      });
+
     })
 
     describe('Class addition', function() {
