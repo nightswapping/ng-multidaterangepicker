@@ -39,7 +39,7 @@ angular.module('daterangepicker.directives', ['lodash'])
 
 })
 
-.directive('daterangepicker', function ($locale, daterangepickerUtils, dateFilter, _, activeRange, calendarData) {
+.directive('daterangepicker', function (calendarData, daterangepickerUtils, dateFilter, _, activeRange) {
   return {
     restrict: 'AE',
     scope: {
@@ -205,6 +205,10 @@ angular.module('daterangepicker.directives', ['lodash'])
         currentDate.setDate(1);
         currentDate.setMonth(currentDate.getMonth() + offset);
         scope.render(currentDate);
+      };
+
+      scope.getI18nMonth = function (date) {
+        return calendarData.months[date.getMonth()];
       };
 
       function isDateDisabled (date) {
