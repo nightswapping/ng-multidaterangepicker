@@ -1,6 +1,6 @@
 # Daterangepicker
 
-[ ![Daterangepicker Master](https://codeship.com/projects/aeb0b060-88f7-0132-ebec-02ce2f7c7d8a/status?branch=master)](https://codeship.com/projects/59564)
+[ ![Daterangepicker Master](https://codeship.com/projects/a45b3400-b38b-0132-4b36-1257de61718a/status?branch=master)](https://codeship.com/projects/70220)
 
 A simple and fluid inline date range picker for AngularJS with lodash/underscore only as a dependency.
 It works both as a simple date picker or as a date range picker and provides a lot of flexibility.
@@ -118,7 +118,7 @@ The calendar will call the provided function everytime a date is clicked. It wil
 activeRange has 4 fields on interest:
 
 **activeRange.first_date:**
-It is set to the date clicked on by the user 
+It is set to the date clicked on by the user
 
 **activeRange.isPendingClick:**
 If set to ```true``` on response to the first click, activeRange stores the first_date value and waits for the user to make a second click
@@ -202,7 +202,7 @@ myApp.config(["calendarData", function(calendarData) {
     "Samedi",
     "Dimanche"
   ];
-    
+
   calendarData.setDays(frenchDays)
 }]);
 ```
@@ -215,7 +215,7 @@ When used as a date picker, users can only select a single date. To achieve this
 ```javascript
   $scope.onDateClick = function (activeRange) {
       activeRange.isLocked = true;
-      
+
       // activeRange.first_date contains a Date Object which you can save, pass to your server or do whatever you want
   };
 ```
