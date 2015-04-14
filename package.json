@@ -1,6 +1,6 @@
 {
   "name": "ng-daterange-picker",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A dependence-free calendar directive for Angular",
   "main": "dist/ng-daterange-picker.min.js",
   "directories": {
