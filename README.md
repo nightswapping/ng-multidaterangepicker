@@ -43,10 +43,10 @@ DateRange is a list of range with the following format
 
 ```javascript
 var dateRange = [
-  { start_date: '2014-12-01', end_date: '2014-12-10', css_class: 'blocked' }
+  { start_date: '2014-12-01', end_date: '2014-12-10', css_classes: 'blocked' }
 ];
 ```
-If a class is provided, it will be added to the date on the calendar.
+If a class is provided, it will be added to the date on the calendar. Multiple classes separated by a space ('blocked disabled').
 
 By default the calendar uses the following classes, which can be easily overwritten:
 
