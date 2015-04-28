@@ -121,7 +121,7 @@ activeRange has 4 fields on interest:
 It is set to the **first** date clicked on by the user
 
 **activeRange.second_date:**
-If ```isPendingClick``` has been set to true, second_date receives the second date the user has click on. Its main purpose is to use the directive as a "date range picker" rather than a simple "date picker"
+If ```isPendingClick``` has been set to true, second_date receives the second date the user has clicked on. Its main purpose is to use the directive as a "date range picker" rather than a simple "date picker"
 
 **activeRange.start_date() and activeRange.end_date():**
 These functions return the starting date and the ending date of the range (chronologically speaking), they are to be used to set an active range in date-ranges for example:
