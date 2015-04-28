@@ -118,13 +118,26 @@ The calendar will call the provided function everytime a date is clicked. It wil
 activeRange has 4 fields on interest:
 
 **activeRange.first_date:**
-It is set to the date clicked on by the user
+It is set to the **first** date clicked on by the user
+
+**activeRange.second_date:**
+If ```isPendingClick``` has been set to true, second_date receives the second date the user has click on. Its main purpose is to use the directive as a "date range picker" rather than a simple "date picker"
+
+**activeRange.start_date() and activeRange.end_date():**
+These functions return the starting date and the ending date of the range (chronologically speaking), they are to be used to set an active range in date-ranges for example:
+
+```javascript
+  var firstDate = $filter('date')(activeRange.start_date(), 'yyyy-MM-dd');
+  var secondDate = $filter('date')(activeRange.end_date(), 'yyyy-MM-dd');
+
+  // highlight selected dates
+  $scope.dateRanges = [
+    { start_date: firstDate, end_date: secondDate }
+  ];
+```
 
 **activeRange.isPendingClick:**
 If set to ```true``` on response to the first click, activeRange stores the first_date value and waits for the user to make a second click
-
-**activeRange.second_date:**
-If ```isPendingClick``` has been set to true, second_date receives the second date the user has click on. Its main purpose is to use the directive as a "date range ppicker" rather than a simple "date picker"
 
 **activeRange.isLocked:**
 If set to true, the directive ignores any mouse event on the calendar
