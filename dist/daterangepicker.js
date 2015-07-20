@@ -44,6 +44,7 @@ angular.module('daterangepicker.directives', ['lodash'])
       range.second_date = date;
     } else {
       range.first_date = date;
+      range.second_date = null;
     }
   };
 
@@ -140,10 +141,10 @@ angular.module('daterangepicker.directives', ['lodash'])
       scope.monthOnly = scope.monthOnly || false;
 
       scope.render = function (initialDate) {
+        currentMonth = initialDate.getMonth() + 1;
+
         initialDate = new Date(initialDate.getFullYear(), initialDate.getMonth(), 1);
         initialDate.setHours(0,0,0,0);
-
-        currentMonth = currentDate.getMonth() + 1;
 
         scope.dates = daterangepickerUtils.buildDates(
           initialDate,

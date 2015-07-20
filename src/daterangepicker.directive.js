@@ -31,6 +31,7 @@ angular.module('daterangepicker.directives', ['lodash'])
       range.second_date = date;
     } else {
       range.first_date = date;
+      range.second_date = null;
     }
   };
 
