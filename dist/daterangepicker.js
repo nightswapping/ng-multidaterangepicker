@@ -250,7 +250,7 @@ angular.module('daterangepicker.directives', ['lodash'])
 
       function isDateDisabled (date) {
         var overlappingRanges = daterangepickerUtils.findRangesForDate(scope.dateRanges, date);
-        var is_disabled = _.any(overlappingRanges, function (dr) {
+        var is_disabled = _.some(overlappingRanges, function (dr) {
           return dr.disabled;
         });
         var belowMaxDate = (maxDate) ? maxDate && date > maxDate : false;
